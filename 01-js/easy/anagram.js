@@ -11,9 +11,7 @@ function isAnagram(str1, str2) {
 
   if (arr1.length !== arr2.length) return false;
 
-  const returnVal = inclu(arr1, arr2) && inclu(arr2, arr1) ? true : false;
-
-  return returnVal
+  return inclu(arr1, arr2) && inclu(arr2, arr1) ? true : false;
 }
 
 module.exports = isAnagram;
