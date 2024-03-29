@@ -17,5 +17,35 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+const PORT = 3000;
+
+app.get('/', (req, res) => {
+  return res.send("api is workingggg");
+});
+
+app.get('/files', (req, res) => {
+  fs.readdir(path.join(__dirname, './files/'), (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to retrieve files' });
+    }
+    return res.send(files);
+  });
+});
+
+app.get('/files/:filename', (req, res) => {
+  const filepath = path.join(__dirname, './files/', req.params.filename);
+  fs.readFile(filepath, 'utf8', (err, file) => {
+    if (err) {
+      return res.status(404).send("File not found");
+    }
+    return res.send(file);
+  });
+});
+
+app.get('*', (req, res) => {
+  return res.sendStatus(404);
+});
+
+app.listen(PORT, () => console.log(`server running http://localhost:${PORT}`));
 
 module.exports = app;
