@@ -39,11 +39,45 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require('express');
+const bodyParser = require('body-parser');
+const todos = require('./todos.json');
+const uuid = require('uuid');
+const app = express();
+
+app.use(bodyParser.json());
+
+
+app.all('/', (req, res) => {
+  res.send("api is working");
+});
+
+app.get('/todos', (req, res) => {
+  res.json(todos);
+});
+
+app.get('/todos/:id', (req, res) => {
+  const todo = todos.find(item => item.id === req.params.id);
+  if (!todo) {
+    res.sendStatus(404);
+    return;
+  }
+  res.send(todo);
+});
+
+app.post('/todos', (req, res) => {
+  const id = uuid.v4();
+  todos.push({ ...req.body, id });
+  res.status(201).send(id);
+});
+
+app.put('/todos/:id', (req, res) => {
+  const todo = todos.findIndex(item => item.id === req.params.id);
+  res.json(todo);
+});
+
+app.listen(3000, () => {
+  console.log(`Server started on port 3000`);
+});
+
+module.exports = app;
