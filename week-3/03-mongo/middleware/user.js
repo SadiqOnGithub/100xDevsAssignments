@@ -7,9 +7,10 @@ async function userMiddleware(req, res, next) {
 
   const foundOne = await User.findOne({ username, password });
   if (foundOne) {
+    req.userId = foundOne._id
     next();
   } else {
-    res.send("admin not exist");
+    res.send("user not exist");
   }
 }
 
