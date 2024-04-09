@@ -24,14 +24,20 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
   await User.findByIdAndUpdate(req.userId, {
     $push: {
       purchasedCourses: courseId
-    } 
-  })
+    }
+  });
 
-  res.send("course added")
+  res.send("course added");
 });
 
-router.get('/purchasedCourses', userMiddleware, (req, res) => {
+router.get('/purchasedCourses', userMiddleware, async (req, res) => {
   // Implement fetching purchased courses logic
+  const { userId } = req;
+
+  const user = await User.findById(userId).populate('purchasedCourses')
+
+  res.send(user.purchasedCourses)
+
 });
 
 module.exports = router;
