@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:8027/');
+// const dbConnect = () => mongoose.connect('mongodb://localhost:8027/');
+const dbConnect = async () =>
+  await mongoose.connect('mongodb://localhost:8027/');
+
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
@@ -27,7 +30,8 @@ const User = mongoose.model('User', UserSchema);
 const Course = mongoose.model('Course', CourseSchema);
 
 module.exports = {
-    Admin,
-    User,
-    Course
-}
+  Admin,
+  User,
+  Course,
+  dbConnect
+};
