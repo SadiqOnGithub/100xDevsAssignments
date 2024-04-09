@@ -7,13 +7,19 @@ const { default: mongoose } = require('mongoose');
 const { dbConnect } = require('./db');
 
 dbConnect();
+const PORT = 3000;
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
+app.get('/', (req, res) => res.send("working"))
 app.use("/admin", adminRouter);
 app.use("/user", userRouter);
 
-const PORT = 3000;
+app.use((err, req, res, next) => {
+  console.log(err)
+
+  res.status(500).send("something went wrong", err)
+})
 
 mongoose.connection.once("open", () => {
   console.log("mongoDB connected");
